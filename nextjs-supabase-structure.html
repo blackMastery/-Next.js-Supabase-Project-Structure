@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next.js + Supabase Project Structure for Rapid MVP Development</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 1200px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .structure {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .folder {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .folder:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .folder-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .folder-icon {
+            width: 32px;
+            height: 32px;
+            margin-right: 12px;
+        }
+
+        .folder-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .folder-description {
+            color: #555;
+            font-size: 0.95em;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .file-list {
+            list-style: none;
+            padding-left: 10px;
+        }
+
+        .file-list li {
+            padding: 6px 0;
+            color: #666;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+        }
+
+        .file-list li:before {
+            content: "📄";
+            margin-right: 8px;
+            font-size: 0.9em;
+        }
+
+        .config-section {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 25px;
+            border-left: 5px solid #ff6b6b;
+        }
+
+        .config-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .config-title:before {
+            content: "⚙️";
+            margin-right: 10px;
+        }
+
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .config-item {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            color: #555;
+            border: 2px solid #ff6b6b33;
+        }
+
+        .tips-section {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 25px;
+            border-left: 5px solid #48c6ef;
+        }
+
+        .tips-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tips-title:before {
+            content: "💡";
+            margin-right: 10px;
+        }
+
+        .tips-list {
+            list-style: none;
+        }
+
+        .tips-list li {
+            padding: 10px 0;
+            color: #555;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .tips-list li:before {
+            content: "✓";
+            color: #48c6ef;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .subtitle {
+                font-size: 1em;
+            }
+
+            .structure {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Next.js + Supabase Project Structure</h1>
+        <p class="subtitle">Optimized for Rapid MVP Development</p>
+
+        <div class="structure">
+            <div class="folder">
+                <div class="folder-header">
+                    <svg class="folder-icon" viewBox="0 0 24 24" fill="#667eea">
+                        <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+                    </svg>
+                    <span class="folder-name">/app</span>
+                </div>
+                <div class="folder-description">Next.js 13+ App Directory - Main application routes and layouts</div>
+                <ul class="file-list">
+                    <li>layout.tsx</li>
+                    <li>page.tsx</li>
+                    <li>api/</li>
+                    <li>(auth)/</li>
+                    <li>(dashboard)/</li>
+                </ul>
+                <span class="badge">Core Routing</span>
+            </div>
+
+            <div class="folder">
+                <div class="folder-header">
+                    <svg class="folder-icon" viewBox="0 0 24 24" fill="#667eea">
+                        <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+                    </svg>
+                    <span class="folder-name">/components</span>
+                </div>
+                <div class="folder-description">Reusable UI components organized by feature</div>
+                <ul class="file-list">
+                    <li>ui/ (buttons, inputs)</li>
+                    <li>auth/</li>
+                    <li>dashboard/</li>
+                    <li>shared/</li>
+                </ul>
+                <span class="badge">UI Layer</span>
+            </div>
+
+            <div class="folder">
+                <div class="folder-header">
+                    <svg class="folder-icon" viewBox="0 0 24 24" fill="#667eea">
+                        <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+                    </svg>
+                    <span class="folder-name">/lib</span>
+                </div>
+                <div class="folder-description">Core utilities, Supabase client, and helper functions</div>
+                <ul class="file-list">
+                    <li>supabase/client.ts</li>
+                    <li>supabase/server.ts</li>
+                    <li>utils.ts</li>
+                    <li>constants.ts</li>
+                </ul>
+                <span class="badge">Business Logic</span>
+            </div>
+
+            <div class="folder">
+                <div class="folder-header">
+                    <svg class="folder-icon" viewBox="0 0 24 24" fill="#667eea">
+                        <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+                    </svg>
+                    <span class="folder-name">/hooks</span>
+                </div>
+                <div class="folder-description">Custom React hooks for data fetching and state management</div>
+                <ul class="file-list">
+                    <li>useUser.ts</li>
+                    <li>useSupabase.ts</li>
+                    <li>useAuth.ts</li>
+                </ul>
+                <span class="badge">State Management</span>
+            </div>
+
+            <div class="folder">
+                <div class="folder-header">
+                    <svg class="folder-icon" viewBox="0 0 24 24" fill="#667eea">
+                        <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+                    </svg>
+                    <span class="folder-name">/types</span>
+                </div>
+                <div class="folder-description">TypeScript type definitions and database schema types</div>
+                <ul class="file-list">
+                    <li>database.types.ts</li>
+                    <li>supabase.ts</li>
+                    <li>index.ts</li>
+                </ul>
+                <span class="badge">Type Safety</span>
+            </div>
+
+            <div class="folder">
+                <div class="folder-header">
+                    <svg class="folder-icon" viewBox="0 0 24 24" fill="#667eea">
+                        <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+                    </svg>
+                    <span class="folder-name">/supabase</span>
+                </div>
+                <div class="folder-description">Supabase migrations, seed data, and configuration</div>
+                <ul class="file-list">
+                    <li>migrations/</li>
+                    <li>seed.sql</li>
+                    <li>config.toml</li>
+                </ul>
+                <span class="badge">Database</span>
+            </div>
+        </div>
+
+        <div class="config-section">
+            <div class="config-title">Essential Configuration Files</div>
+            <div class="config-grid">
+                <div class="config-item"><strong>.env.local</strong><br>Environment variables</div>
+                <div class="config-item"><strong>next.config.js</strong><br>Next.js configuration</div>
+                <div class="config-item"><strong>tsconfig.json</strong><br>TypeScript setup</div>
+                <div class="config-item"><strong>tailwind.config.js</strong><br>Tailwind CSS config</div>
+                <div class="config-item"><strong>middleware.ts</strong><br>Auth middleware</div>
+                <div class="config-item"><strong>package.json</strong><br>Dependencies</div>
+            </div>
+        </div>
+
+        <div class="tips-section">
+            <div class="tips-title">MVP Development Best Practices</div>
+            <ul class="tips-list">
+                <li><strong>Use Server Components by default</strong> - Leverage Next.js 13+ App Router for better performance</li>
+                <li><strong>Implement Row Level Security (RLS)</strong> - Let Supabase handle auth at the database level</li>
+                <li><strong>Type-safe database queries</strong> - Use Supabase CLI to generate TypeScript types from your schema</li>
+                <li><strong>Middleware for auth</strong> - Protect routes using Next.js middleware with Supabase session checks</li>
+                <li><strong>API Routes sparingly</strong> - Use Server Actions or direct Supabase calls when possible</li>
+                <li><strong>Supabase Realtime</strong> - Add live features without complex WebSocket setup</li>
+                <li><strong>Edge Functions</strong> - Deploy serverless functions alongside your database for complex logic</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
